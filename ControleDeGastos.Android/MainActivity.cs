@@ -15,22 +15,30 @@ namespace ControleDeGastos.Android
             base.OnCreate(bundle);
 
             var gastos = CarregarGastos();
-            var gastosFormatados = gastos.Select(g => string.Format("{0:d} - {1}: {2:n2}", g.Data, g.Estabelecimento.Nome, g.Valor)).ToArray();
 
             SetContentView(Resource.Layout.Main);
 
             var listViewGastos = FindViewById<ListView>(Resource.Id.listViewGastos);
-            listViewGastos.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleListItem1, gastosFormatados);
+            listViewGastos.Adapter = new ListViewAdapter(this, gastos);
         }
 
         private List<Models.Gasto> CarregarGastos()
         {
-            var gastos = new List<Models.Gasto>();
+            var estabelecimentos = new List<Models.Estabelecimento>();
+            for (int c = 1; c <= 10; c++)
+            {
+                estabelecimentos.Add(new Models.Estabelecimento() { Id = c, Nome = string.Format("Estabelecimento {0}", c) });
+            }
 
-            var restaurante = new Models.Estabelecimento() { Id = 1, Nome = "Restaurante" };
-            var padaria = new Models.Estabelecimento() { Id = 2, Nome = "Padaria" };
-            gastos.Add(new Models.Gasto() { Id = 1, Data = DateTime.Now, Estabelecimento = restaurante, Valor = 15 });
-            gastos.Add(new Models.Gasto() { Id = 2, Data = DateTime.Now.AddDays(1), Estabelecimento = padaria, Valor = 3 });
+            var random = new Random();
+            var gastos = new List<Models.Gasto>();
+            for (int c = 1; c <= 15; c++)
+            {
+                var data = DateTime.Now.AddDays(random.Next(0, 3));
+                var estabelecimento = estabelecimentos[random.Next(0, estabelecimentos.Count - 1)];
+                var valor = random.Next(1, 50);
+                gastos.Add(new Models.Gasto() { Id = c, Data = data, Estabelecimento = estabelecimento, Valor = valor });
+            }
 
             return gastos;
         }
