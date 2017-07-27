@@ -19,7 +19,8 @@ namespace ControleDeGastos.Android
             SetContentView(Resource.Layout.Main);
 
             var listViewGastos = FindViewById<ListView>(Resource.Id.listViewGastos);
-            listViewGastos.Adapter = new ListViewAdapter(this, gastos);
+            var listViewItems = PrepararListViewItems(gastos);
+            listViewGastos.Adapter = new ListViewAdapter(this, listViewItems);
         }
 
         private List<Models.Gasto> CarregarGastos()
@@ -41,6 +42,37 @@ namespace ControleDeGastos.Android
             }
 
             return gastos;
+        }
+
+        private List<ListViewItem> PrepararListViewItems(List<Models.Gasto> gastos)
+        {
+            var listViewItems = new List<ListViewItem>();
+
+            if (gastos.Any())
+            {
+                var gastosOrdenados = gastos.OrderBy(g => g.Data).ToList();
+                var primeiroGasto = gastosOrdenados.First();
+
+                listViewItems.Add(new ListViewItem() { Header = true, Data = primeiroGasto.Data });
+                listViewItems.Add(new ListViewItem() { IdGasto = primeiroGasto.Id, Data = primeiroGasto.Data, NomeEstabelecimento = primeiroGasto.Estabelecimento.Nome, Valor = primeiroGasto.Valor });
+
+                var gastoAnterior = primeiroGasto;
+                for (int c = 1; c <= gastosOrdenados.Count - 1; c++)
+                {
+                    var gastoAtual = gastosOrdenados[c];
+
+                    if (gastoAtual.Data.Date != gastoAnterior.Data.Date)
+                    {
+                        listViewItems.Add(new ListViewItem() { Header = true, Data = gastoAtual.Data });
+                    }
+
+                    listViewItems.Add(new ListViewItem() { IdGasto = gastoAtual.Id, Data = gastoAtual.Data, NomeEstabelecimento = gastoAtual.Estabelecimento.Nome, Valor = gastoAtual.Valor });
+
+                    gastoAnterior = gastoAtual;
+                }
+            }
+
+            return listViewItems;
         }
     }
 }

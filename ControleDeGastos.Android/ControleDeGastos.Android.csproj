@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ListViewAdapter.cs" />
+    <Compile Include="ListViewItem.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\Estabelecimento.cs" />
     <Compile Include="Models\Gasto.cs" />
@@ -63,6 +64,9 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\layout\ListItemRow.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\ListItemGroupHeaderRow.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

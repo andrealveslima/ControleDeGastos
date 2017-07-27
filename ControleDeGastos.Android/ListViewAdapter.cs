@@ -12,11 +12,11 @@ using Android.Widget;
 
 namespace ControleDeGastos.Android
 {
-    public class ListViewAdapter : BaseAdapter<Models.Gasto>
+    public class ListViewAdapter : BaseAdapter<ListViewItem>
     {
-        List<Models.Gasto> items;
+        List<ListViewItem> items;
         Activity context;
-        public ListViewAdapter(Activity context, List<Models.Gasto> items) : base()
+        public ListViewAdapter(Activity context, List<ListViewItem> items) : base()
         {
             this.context = context;
             this.items = items;
@@ -25,7 +25,7 @@ namespace ControleDeGastos.Android
         {
             return position;
         }
-        public override Models.Gasto this[int position]
+        public override ListViewItem this[int position]
         {
             get { return items[position]; }
         }
@@ -37,11 +37,18 @@ namespace ControleDeGastos.Android
         {
             var item = items[position];
             View view = convertView;
-            if (view == null)
+            if (item.Header)
+            {
+                view = context.LayoutInflater.Inflate(Resource.Layout.ListItemGroupHeaderRow, null);
+                view.FindViewById<TextView>(Resource.Id.Data).Text = string.Format("{0:d}", item.Data);
+            }
+            else
+            {
                 view = context.LayoutInflater.Inflate(Resource.Layout.ListItemRow, null);
-            view.FindViewById<TextView>(Resource.Id.Valor).Text = string.Format("{0:c}", item.Valor);
-            view.FindViewById<TextView>(Resource.Id.Estabelecimento).Text = item.Estabelecimento.Nome;
-            view.FindViewById<TextView>(Resource.Id.Data).Text = string.Format("{0:d}", item.Data);
+                view.FindViewById<TextView>(Resource.Id.Valor).Text = string.Format("{0:c}", item.Valor);
+                view.FindViewById<TextView>(Resource.Id.NomeEstabelecimento).Text = item.NomeEstabelecimento;
+            }
+
             return view;
         }
     }
