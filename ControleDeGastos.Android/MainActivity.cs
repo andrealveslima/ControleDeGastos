@@ -12,6 +12,10 @@ namespace ControleDeGastos.Android
     {
         protected override void OnCreate(Bundle bundle)
         {
+            var culture = new System.Globalization.CultureInfo("de-DE");
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+
             base.OnCreate(bundle);
 
             var gastos = CarregarGastos();
