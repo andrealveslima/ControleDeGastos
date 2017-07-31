@@ -9,47 +9,93 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Java.Lang;
 
 namespace ControleDeGastos.Android
 {
-    public class ListViewAdapter : BaseAdapter<ListViewItem>
+    public class ListViewAdapter : BaseExpandableListAdapter
     {
-        List<ListViewItem> items;
+        List<ListViewGroup> grupos;
         Activity context;
-        public ListViewAdapter(Activity context, List<ListViewItem> items) : base()
+        public ListViewAdapter(Activity context, List<ListViewGroup> grupos) : base()
         {
             this.context = context;
-            this.items = items;
+            this.grupos = grupos;
         }
-        public override long GetItemId(int position)
+
+        public override int GroupCount
         {
-            return position;
-        }
-        public override ListViewItem this[int position]
-        {
-            get { return items[position]; }
-        }
-        public override int Count
-        {
-            get { return items.Count; }
-        }
-        public override View GetView(int position, View convertView, ViewGroup parent)
-        {
-            var item = items[position];
-            View view = convertView;
-            if (item.Header)
+            get
             {
-                view = context.LayoutInflater.Inflate(Resource.Layout.ListItemGroupHeaderRow, null);
-                view.FindViewById<TextView>(Resource.Id.Data).Text = string.Format("{0:d}", item.Data);
+                return grupos.Count;
             }
-            else
+        }
+
+        public override bool HasStableIds
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override Java.Lang.Object GetChild(int groupPosition, int childPosition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long GetChildId(int groupPosition, int childPosition)
+        {
+            return childPosition;
+        }
+
+        public override int GetChildrenCount(int groupPosition)
+        {
+            return grupos[groupPosition].ListViewItems.Count;
+        }
+
+        public override View GetChildView(int groupPosition, int childPosition, bool isLastChild, View convertView, ViewGroup parent)
+        {
+            View view = convertView;
+            var item = grupos[groupPosition].ListViewItems[childPosition];
+
+            if (view == null)
             {
                 view = context.LayoutInflater.Inflate(Resource.Layout.ListItemRow, null);
-                view.FindViewById<TextView>(Resource.Id.Valor).Text = string.Format("{0:c}", item.Valor);
-                view.FindViewById<TextView>(Resource.Id.NomeEstabelecimento).Text = item.NomeEstabelecimento;
             }
+            view.FindViewById<TextView>(Resource.Id.Valor).Text = string.Format("{0:c}", item.Valor);
+            view.FindViewById<TextView>(Resource.Id.NomeEstabelecimento).Text = item.NomeEstabelecimento;
 
             return view;
+        }
+
+        public override Java.Lang.Object GetGroup(int groupPosition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long GetGroupId(int groupPosition)
+        {
+            return groupPosition;
+        }
+
+        public override View GetGroupView(int groupPosition, bool isExpanded, View convertView, ViewGroup parent)
+        {
+            View view = convertView;
+            var item = grupos[groupPosition];
+
+            if (view == null)
+            {
+                view = context.LayoutInflater.Inflate(Resource.Layout.ListItemGroupHeaderRow, null);
+            }
+            view.FindViewById<TextView>(Resource.Id.Data).Text = string.Format("{0:d}", item.Data);
+
+            return view;
+        }
+
+        public override bool IsChildSelectable(int groupPosition, int childPosition)
+        {
+            return true;
         }
     }
 }
