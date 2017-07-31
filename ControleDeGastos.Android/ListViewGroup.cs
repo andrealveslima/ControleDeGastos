@@ -12,10 +12,14 @@ using Android.Widget;
 
 namespace ControleDeGastos.Android
 {
-    public class ListViewItem
+    public class ListViewGroup
     {
-        public int IdGasto { get; set; }
-        public string NomeEstabelecimento { get; set; }
-        public decimal Valor { get; set; }
+        public DateTime Data { get; set; }
+        public List<ListViewItem> ListViewItems { get; set; }
+
+        public ListViewGroup()
+        {
+            ListViewItems = new List<ListViewItem>();
+        }
     }
 }

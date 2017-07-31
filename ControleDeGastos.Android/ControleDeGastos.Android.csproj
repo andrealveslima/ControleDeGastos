@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ListViewAdapter.cs" />
+    <Compile Include="ListViewGroup.cs" />
     <Compile Include="ListViewItem.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\Estabelecimento.cs" />
