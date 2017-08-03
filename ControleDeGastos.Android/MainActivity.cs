@@ -60,20 +60,23 @@ namespace ControleDeGastos.Android
 
             if (gastos.Any())
             {
-                var gastosOrdenados = gastos.OrderBy(g => g.Data);
+                var gastosAgrupados = from gasto in gastos
+                                      group gasto by gasto.Data.Date into grupoDeGastos
+                                      select new
+                                      {
+                                          Data = grupoDeGastos.Key,
+                                          Gastos = grupoDeGastos
+                                      };
 
-                Models.Gasto gastoAnterior = null;
-                ListViewGroup grupoAtual = null;
-                foreach (var gasto in gastosOrdenados)
+                foreach (var gastoAgrupado in gastosAgrupados)
                 {
-                    if (gastoAnterior == null || gasto.Data.Date != gastoAnterior.Data.Date)
-                    {
-                        grupoAtual = new ListViewGroup() { Data = gasto.Data };
-                        listViewGroups.Add(grupoAtual);
-                    }
+                    var listViewGroup = new ListViewGroup() { Data = gastoAgrupado.Data };
+                    listViewGroups.Add(listViewGroup);
 
-                    grupoAtual.ListViewItems.Add(new ListViewItem() { IdGasto = gasto.Id, NomeEstabelecimento = gasto.Estabelecimento.Nome, Valor = gasto.Valor });
-                    gastoAnterior = gasto;
+                    foreach (var gasto in gastoAgrupado.Gastos)
+                    {
+                        listViewGroup.ListViewItems.Add(new ListViewItem() { IdGasto = gasto.Id, NomeEstabelecimento = gasto.Estabelecimento.Nome, Valor = gasto.Valor });
+                    }
                 }
             }
 
