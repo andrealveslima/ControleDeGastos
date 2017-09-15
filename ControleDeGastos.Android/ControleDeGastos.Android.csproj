@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditarGastoActivity.cs" />
     <Compile Include="ListViewAdapter.cs" />
     <Compile Include="ListViewGroup.cs" />
     <Compile Include="ListViewItem.cs" />
@@ -68,6 +69,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\ListItemGroupHeaderRow.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\EditarGasto.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
