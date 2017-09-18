@@ -38,7 +38,7 @@ namespace ControleDeGastos.Android
 
             var valor = Intent.Extras.GetDouble("Valor");
             _editTextValor = FindViewById<EditText>(Resource.Id.editTextValor);
-            _editTextValor.Text = valor.ToString(System.Threading.Thread.CurrentThread.CurrentUICulture);
+            _editTextValor.Text = valor.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
             var cancelar = FindViewById<Button>(Resource.Id.buttonCancelar);
             cancelar.Click += (s, e) => Finish();
