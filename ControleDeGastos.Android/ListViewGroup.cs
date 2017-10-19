@@ -15,11 +15,11 @@ namespace ControleDeGastos.Android
     public class ListViewGroup
     {
         public DateTime Data { get; set; }
-        public List<ListViewItem> ListViewItems { get; set; }
+        public List<Models.Gasto> Gastos { get; set; }
 
         public ListViewGroup()
         {
-            ListViewItems = new List<ListViewItem>();
+            Gastos = new List<Models.Gasto>();
         }
     }
 }

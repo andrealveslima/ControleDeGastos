@@ -51,20 +51,20 @@ namespace ControleDeGastos.Android
 
         public override int GetChildrenCount(int groupPosition)
         {
-            return grupos[groupPosition].ListViewItems.Count;
+            return grupos[groupPosition].Gastos.Count;
         }
 
         public override View GetChildView(int groupPosition, int childPosition, bool isLastChild, View convertView, ViewGroup parent)
         {
             View view = convertView;
-            var item = grupos[groupPosition].ListViewItems[childPosition];
+            var gasto = grupos[groupPosition].Gastos[childPosition];
 
             if (view == null)
             {
                 view = context.LayoutInflater.Inflate(Resource.Layout.ListItemRow, null);
             }
-            view.FindViewById<TextView>(Resource.Id.Valor).Text = string.Format("{0:c}", item.Valor);
-            view.FindViewById<TextView>(Resource.Id.NomeEstabelecimento).Text = item.NomeEstabelecimento;
+            view.FindViewById<TextView>(Resource.Id.Valor).Text = string.Format("{0:c}", gasto.Valor);
+            view.FindViewById<TextView>(Resource.Id.NomeEstabelecimento).Text = gasto.Estabelecimento.Nome;
 
             return view;
         }

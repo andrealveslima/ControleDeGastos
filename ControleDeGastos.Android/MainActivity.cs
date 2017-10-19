@@ -60,15 +60,7 @@ namespace ControleDeGastos.Android
                     {
                         gasto.Estabelecimento = estabelecimento;
                     }
-
-                    var listViewGroup = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Date == gasto.Data.Date);
-                    if (listViewGroup != null)
-                    {
-                        var listViewItem = listViewGroup.ListViewItems.FirstOrDefault(lvi => lvi.IdGasto == id);
-                        listViewItem.Valor = gasto.Valor;
-                        listViewItem.NomeEstabelecimento = gasto.Estabelecimento.Nome;
-                        _adapter.NotifyDataSetChanged();
-                    }
+                    _adapter.NotifyDataSetChanged();
                 }
             }
         }
@@ -76,12 +68,12 @@ namespace ControleDeGastos.Android
         private void ListViewGastos_ChildClick(object sender, ExpandableListView.ChildClickEventArgs e)
         {
             var infoGrupo = _listViewGroups[e.GroupPosition];
-            var infoGasto = infoGrupo.ListViewItems[e.ChildPosition];
+            var gasto = infoGrupo.Gastos[e.ChildPosition];
             var intent = new Intent(this, typeof(EditarGastoActivity));
-            intent.PutExtra("Id", infoGasto.IdGasto);
+            intent.PutExtra("Id", gasto.Id);
             intent.PutExtra("Data", infoGrupo.Data.Ticks);
-            intent.PutExtra("Estabelecimento", infoGasto.NomeEstabelecimento);
-            intent.PutExtra("Valor", Convert.ToDouble(infoGasto.Valor));
+            intent.PutExtra("Estabelecimento", gasto.Estabelecimento.Nome);
+            intent.PutExtra("Valor", Convert.ToDouble(gasto.Valor));
             StartActivityForResult(intent, 0);
         }
 
@@ -124,11 +116,7 @@ namespace ControleDeGastos.Android
                 {
                     var listViewGroup = new ListViewGroup() { Data = gastoAgrupado.Data };
                     listViewGroups.Add(listViewGroup);
-
-                    foreach (var gasto in gastoAgrupado.Gastos)
-                    {
-                        listViewGroup.ListViewItems.Add(new ListViewItem() { IdGasto = gasto.Id, NomeEstabelecimento = gasto.Estabelecimento.Nome, Valor = gasto.Valor });
-                    }
+                    listViewGroup.Gastos.AddRange(gastoAgrupado.Gastos);
                 }
             }
 
