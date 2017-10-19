@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatePickerFragment.cs" />
     <Compile Include="EditarGastoActivity.cs" />
     <Compile Include="ListViewAdapter.cs" />
     <Compile Include="ListViewGroup.cs" />

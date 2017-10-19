@@ -31,6 +31,7 @@ namespace ControleDeGastos.Android
             var data = new DateTime(Intent.Extras.GetLong("Data"));
             _editTextData = FindViewById<EditText>(Resource.Id.editTextData);
             _editTextData.Text = data.ToShortDateString();
+            _editTextData.Click += editTextData_Click;
 
             var estabelecimento = Intent.Extras.GetString("Estabelecimento");
             _editTextEstabelecimento = FindViewById<EditText>(Resource.Id.editTextEstabelecimento);
@@ -45,6 +46,17 @@ namespace ControleDeGastos.Android
 
             var salvar = FindViewById<Button>(Resource.Id.buttonSalvar);
             salvar.Click += Salvar_Click;
+        }
+
+        private void editTextData_Click(object sender, EventArgs e)
+        {
+            var frag = DatePickerFragment.NewInstance(
+                Convert.ToDateTime(_editTextData.Text),
+                (data) =>
+                {
+                    _editTextData.Text = data.ToShortDateString();
+                });
+            frag.Show(FragmentManager, DatePickerFragment.TAG);
         }
 
         private void Salvar_Click(object sender, EventArgs e)
