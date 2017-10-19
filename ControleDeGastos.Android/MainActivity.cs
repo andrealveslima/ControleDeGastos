@@ -34,12 +34,18 @@ namespace ControleDeGastos.Android
             _adapter = new ListViewAdapter(this, _listViewGroups);
             listViewGastos.SetAdapter(_adapter);
 
+            ExpandirTodosOsGruposDoListView();
+
+            listViewGastos.ChildClick += ListViewGastos_ChildClick;
+        }
+
+        private void ExpandirTodosOsGruposDoListView()
+        {
+            var listViewGastos = FindViewById<ExpandableListView>(Resource.Id.listViewGastos);
             for (int group = 0; group <= _adapter.GroupCount - 1; group++)
             {
                 listViewGastos.ExpandGroup(group);
             }
-
-            listViewGastos.ChildClick += ListViewGastos_ChildClick;
         }
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
@@ -53,14 +59,40 @@ namespace ControleDeGastos.Android
 
                 if (gasto != null)
                 {
+                    var dataAnterior = gasto.Data.Date;
+                    var dataNova = new DateTime(data.Extras.GetLong("Data")).Date;
+                    gasto.Data = dataNova;
                     gasto.Valor = Convert.ToDecimal(data.Extras.GetDouble("Valor"));
                     var nomeEstabelecimento = data.Extras.GetString("Estabelecimento");
                     var estabelecimento = _estabelecimentos.FirstOrDefault(e => string.Compare(e.Nome, nomeEstabelecimento, StringComparison.InvariantCultureIgnoreCase) == 0);
-                    if (estabelecimento != null)
+                    if (estabelecimento == null)
                     {
-                        gasto.Estabelecimento = estabelecimento;
+                        estabelecimento = new Models.Estabelecimento()
+                        {
+                            Nome = nomeEstabelecimento
+                        };
                     }
+                    gasto.Estabelecimento = estabelecimento;
+
+                    if (!dataAnterior.Equals(dataNova))
+                    {
+                        var listViewGroupAnterior = _listViewGroups.First(lvg => lvg.Data.Equals(dataAnterior));
+                        listViewGroupAnterior.Gastos.Remove(gasto);
+
+                        var listViewGroupNovo = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataNova));
+                        if (listViewGroupNovo == null)
+                        {
+                            listViewGroupNovo = new ListViewGroup()
+                            {
+                                Data = dataNova
+                            };
+                            _listViewGroups.Add(listViewGroupNovo);
+                        }
+                        listViewGroupNovo.Gastos.Add(gasto);
+                    }
+
                     _adapter.NotifyDataSetChanged();
+                    ExpandirTodosOsGruposDoListView();
                 }
             }
         }
