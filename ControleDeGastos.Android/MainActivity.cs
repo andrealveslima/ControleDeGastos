@@ -12,6 +12,8 @@ namespace ControleDeGastos.Android
     [Activity(Label = "Controle de Gastos", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
+        private ExpandableListView _listViewGastos;
+
         private List<Models.Estabelecimento> _estabelecimentos;
         private List<Models.Gasto> _gastos;
         private List<ListViewGroup> _listViewGroups;
@@ -29,22 +31,21 @@ namespace ControleDeGastos.Android
 
             SetContentView(Resource.Layout.Main);
 
-            var listViewGastos = FindViewById<ExpandableListView>(Resource.Id.listViewGastos);
+            _listViewGastos = FindViewById<ExpandableListView>(Resource.Id.listViewGastos);
             _listViewGroups = PrepararListViewGroups(_gastos);
             _adapter = new ListViewAdapter(this, _listViewGroups);
-            listViewGastos.SetAdapter(_adapter);
+            _listViewGastos.SetAdapter(_adapter);
 
             ExpandirTodosOsGruposDoListView();
 
-            listViewGastos.ChildClick += ListViewGastos_ChildClick;
+            _listViewGastos.ChildClick += ListViewGastos_ChildClick;
         }
 
         private void ExpandirTodosOsGruposDoListView()
         {
-            var listViewGastos = FindViewById<ExpandableListView>(Resource.Id.listViewGastos);
             for (int group = 0; group <= _adapter.GroupCount - 1; group++)
             {
-                listViewGastos.ExpandGroup(group);
+                _listViewGastos.ExpandGroup(group);
             }
         }
 
