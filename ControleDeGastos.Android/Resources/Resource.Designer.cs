@@ -60,20 +60,20 @@ namespace ControleDeGastos.Android
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050009
-			public const int Data = 2131034121;
-			
-			// aapt resource value: 0x7f05000b
-			public const int NomeEstabelecimento = 2131034123;
+			// aapt resource value: 0x7f050008
+			public const int Data = 2131034120;
 			
 			// aapt resource value: 0x7f05000a
-			public const int Valor = 2131034122;
+			public const int NomeEstabelecimento = 2131034122;
 			
-			// aapt resource value: 0x7f050008
-			public const int buttonCancelar = 2131034120;
+			// aapt resource value: 0x7f050009
+			public const int Valor = 2131034121;
 			
 			// aapt resource value: 0x7f050007
-			public const int buttonSalvar = 2131034119;
+			public const int buttonCancelar = 2131034119;
+			
+			// aapt resource value: 0x7f050006
+			public const int buttonSalvar = 2131034118;
 			
 			// aapt resource value: 0x7f050001
 			public const int editTextData = 2131034113;
@@ -84,11 +84,8 @@ namespace ControleDeGastos.Android
 			// aapt resource value: 0x7f050005
 			public const int editTextValor = 2131034117;
 			
-			// aapt resource value: 0x7f050006
-			public const int linearLayoutBotoes = 2131034118;
-			
-			// aapt resource value: 0x7f05000c
-			public const int listViewGastos = 2131034124;
+			// aapt resource value: 0x7f05000b
+			public const int listViewGastos = 2131034123;
 			
 			// aapt resource value: 0x7f050000
 			public const int textViewData = 2131034112;
