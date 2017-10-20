@@ -13,6 +13,8 @@ namespace ControleDeGastos.Android
     public class MainActivity : Activity
     {
         private ExpandableListView _listViewGastos;
+        private Button _buttonNovo;
+        private Button _buttonLimpar;
 
         public static List<Models.Estabelecimento> Estabelecimentos { get; private set; }
         private List<Models.Gasto> _gastos;
@@ -35,10 +37,29 @@ namespace ControleDeGastos.Android
             _listViewGroups = PrepararListViewGroups(_gastos);
             _adapter = new ListViewAdapter(this, _listViewGroups);
             _listViewGastos.SetAdapter(_adapter);
-
+            _listViewGastos.ChildClick += ListViewGastos_ChildClick;
             ExpandirTodosOsGruposDoListView();
 
-            _listViewGastos.ChildClick += ListViewGastos_ChildClick;
+            _buttonNovo = FindViewById<Button>(Resource.Id.buttonNovo);
+            _buttonNovo.Click += buttonNovo_Click;
+
+            _buttonLimpar = FindViewById<Button>(Resource.Id.buttonLimpar);
+            _buttonLimpar.Click += buttonLimpar_Click;
+        }
+
+        private void buttonLimpar_Click(object sender, EventArgs e)
+        {
+            _gastos.Clear();
+            _listViewGroups.Clear();
+            _adapter.NotifyDataSetChanged();
+        }
+
+        private void buttonNovo_Click(object sender, EventArgs e)
+        {
+            var intent = new Intent(this, typeof(EditarGastoActivity));
+            intent.PutExtra("Id", -1);
+            intent.PutExtra("Data", DateTime.Now.Date.Ticks);
+            StartActivityForResult(intent, 0);
         }
 
         private void ExpandirTodosOsGruposDoListView()
@@ -58,44 +79,57 @@ namespace ControleDeGastos.Android
                 var id = data.Extras.GetInt("Id");
                 var gasto = _gastos.FirstOrDefault(g => g.Id == id);
 
-                if (gasto != null)
+                if (gasto == null)
                 {
-                    var dataAnterior = gasto.Data.Date;
-                    var dataNova = new DateTime(data.Extras.GetLong("Data")).Date;
-                    gasto.Data = dataNova;
-                    gasto.Valor = Convert.ToDecimal(data.Extras.GetDouble("Valor"));
-                    var nomeEstabelecimento = data.Extras.GetString("Estabelecimento");
-                    var estabelecimento = Estabelecimentos.FirstOrDefault(e => string.Compare(e.Nome, nomeEstabelecimento, StringComparison.InvariantCultureIgnoreCase) == 0);
-                    if (estabelecimento == null)
+                    gasto = new Models.Gasto()
                     {
-                        estabelecimento = new Models.Estabelecimento()
-                        {
-                            Nome = nomeEstabelecimento
-                        };
-                    }
-                    gasto.Estabelecimento = estabelecimento;
-
-                    if (!dataAnterior.Equals(dataNova))
+                        Id = 1
+                    };
+                    if (_gastos.Any())
                     {
-                        var listViewGroupAnterior = _listViewGroups.First(lvg => lvg.Data.Equals(dataAnterior));
-                        listViewGroupAnterior.Gastos.Remove(gasto);
-
-                        var listViewGroupNovo = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataNova));
-                        if (listViewGroupNovo == null)
-                        {
-                            listViewGroupNovo = new ListViewGroup()
-                            {
-                                Data = dataNova
-                            };
-                            _listViewGroups.Add(listViewGroupNovo);
-                        }
-                        listViewGroupNovo.Gastos.Add(gasto);
-                        _listViewGroups.Sort((lvg1, lvg2) => lvg1.Data.CompareTo(lvg2.Data));
+                        gasto.Id = _gastos.Max(g => g.Id) + 1;
                     }
-
-                    _adapter.NotifyDataSetChanged();
-                    ExpandirTodosOsGruposDoListView();
+                    _gastos.Add(gasto);
                 }
+
+                var dataAnterior = gasto.Data.Date;
+                var dataNova = new DateTime(data.Extras.GetLong("Data")).Date;
+                gasto.Data = dataNova;
+                gasto.Valor = Convert.ToDecimal(data.Extras.GetDouble("Valor"));
+                var nomeEstabelecimento = data.Extras.GetString("Estabelecimento");
+                var estabelecimento = Estabelecimentos.FirstOrDefault(e => string.Compare(e.Nome, nomeEstabelecimento, StringComparison.InvariantCultureIgnoreCase) == 0);
+                if (estabelecimento == null)
+                {
+                    estabelecimento = new Models.Estabelecimento()
+                    {
+                        Nome = nomeEstabelecimento
+                    };
+                }
+                gasto.Estabelecimento = estabelecimento;
+
+                if (!dataAnterior.Equals(dataNova))
+                {
+                    var listViewGroupAnterior = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataAnterior));
+                    if (listViewGroupAnterior != null)
+                    {
+                        listViewGroupAnterior.Gastos.Remove(gasto);
+                    }
+
+                    var listViewGroupNovo = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataNova));
+                    if (listViewGroupNovo == null)
+                    {
+                        listViewGroupNovo = new ListViewGroup()
+                        {
+                            Data = dataNova
+                        };
+                        _listViewGroups.Add(listViewGroupNovo);
+                    }
+                    listViewGroupNovo.Gastos.Add(gasto);
+                    _listViewGroups.Sort((lvg1, lvg2) => lvg1.Data.CompareTo(lvg2.Data));
+                }
+
+                _adapter.NotifyDataSetChanged();
+                ExpandirTodosOsGruposDoListView();
             }
         }
 

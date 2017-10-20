@@ -72,6 +72,12 @@ namespace ControleDeGastos.Android
 			// aapt resource value: 0x7f050007
 			public const int buttonCancelar = 2131034119;
 			
+			// aapt resource value: 0x7f05000d
+			public const int buttonLimpar = 2131034125;
+			
+			// aapt resource value: 0x7f05000c
+			public const int buttonNovo = 2131034124;
+			
 			// aapt resource value: 0x7f050006
 			public const int buttonSalvar = 2131034118;
 			

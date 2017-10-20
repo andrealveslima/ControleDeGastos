@@ -36,8 +36,11 @@ namespace ControleDeGastos.Android
             var nomeEstabelecimento = Intent.Extras.GetString("Estabelecimento");
             _spinnerEstabelecimento = FindViewById<Spinner>(Resource.Id.spinnerEstabelecimento);
             _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Estabelecimentos.Select(e => e.Nome).ToArray());
-            var estabelecimento = MainActivity.Estabelecimentos.First(e => nomeEstabelecimento == e.Nome);
-            _spinnerEstabelecimento.SetSelection(MainActivity.Estabelecimentos.IndexOf(estabelecimento));
+            var estabelecimento = MainActivity.Estabelecimentos.FirstOrDefault(e => nomeEstabelecimento == e.Nome);
+            if (estabelecimento != null)
+            {
+                _spinnerEstabelecimento.SetSelection(MainActivity.Estabelecimentos.IndexOf(estabelecimento));
+            }
 
             var valor = Intent.Extras.GetDouble("Valor");
             _editTextValor = FindViewById<EditText>(Resource.Id.editTextValor);
