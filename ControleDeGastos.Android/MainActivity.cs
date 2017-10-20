@@ -90,6 +90,7 @@ namespace ControleDeGastos.Android
                             _listViewGroups.Add(listViewGroupNovo);
                         }
                         listViewGroupNovo.Gastos.Add(gasto);
+                        _listViewGroups.Sort((lvg1, lvg2) => lvg1.Data.CompareTo(lvg2.Data));
                     }
 
                     _adapter.NotifyDataSetChanged();
@@ -138,6 +139,7 @@ namespace ControleDeGastos.Android
             if (gastos.Any())
             {
                 var gastosAgrupados = from gasto in gastos
+                                      orderby gasto.Data
                                       group gasto by gasto.Data.Date into grupoDeGastos
                                       select new
                                       {
