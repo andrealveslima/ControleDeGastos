@@ -78,14 +78,14 @@ namespace ControleDeGastos.Android
 			// aapt resource value: 0x7f050001
 			public const int editTextData = 2131034113;
 			
-			// aapt resource value: 0x7f050003
-			public const int editTextEstabelecimento = 2131034115;
-			
 			// aapt resource value: 0x7f050005
 			public const int editTextValor = 2131034117;
 			
 			// aapt resource value: 0x7f05000b
 			public const int listViewGastos = 2131034123;
+			
+			// aapt resource value: 0x7f050003
+			public const int spinnerEstabelecimento = 2131034115;
 			
 			// aapt resource value: 0x7f050000
 			public const int textViewData = 2131034112;

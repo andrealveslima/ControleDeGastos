@@ -17,7 +17,7 @@ namespace ControleDeGastos.Android
     {
         private int _idGasto;
         private EditText _editTextData;
-        private EditText _editTextEstabelecimento;
+        private Spinner _spinnerEstabelecimento;
         private EditText _editTextValor;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -33,9 +33,11 @@ namespace ControleDeGastos.Android
             _editTextData.Text = data.ToShortDateString();
             _editTextData.Click += editTextData_Click;
 
-            var estabelecimento = Intent.Extras.GetString("Estabelecimento");
-            _editTextEstabelecimento = FindViewById<EditText>(Resource.Id.editTextEstabelecimento);
-            _editTextEstabelecimento.Text = estabelecimento;
+            var nomeEstabelecimento = Intent.Extras.GetString("Estabelecimento");
+            _spinnerEstabelecimento = FindViewById<Spinner>(Resource.Id.spinnerEstabelecimento);
+            _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Estabelecimentos.Select(e => e.Nome).ToArray());
+            var estabelecimento = MainActivity.Estabelecimentos.First(e => nomeEstabelecimento == e.Nome);
+            _spinnerEstabelecimento.SetSelection(MainActivity.Estabelecimentos.IndexOf(estabelecimento));
 
             var valor = Intent.Extras.GetDouble("Valor");
             _editTextValor = FindViewById<EditText>(Resource.Id.editTextValor);
@@ -65,7 +67,7 @@ namespace ControleDeGastos.Android
             intent.PutExtra("Id", _idGasto);
             var data = Convert.ToDateTime(_editTextData.Text);
             intent.PutExtra("Data", data.Ticks);
-            intent.PutExtra("Estabelecimento", _editTextEstabelecimento.Text);
+            intent.PutExtra("Estabelecimento", MainActivity.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition].Nome);
             intent.PutExtra("Valor", Convert.ToDouble(_editTextValor.Text, System.Globalization.CultureInfo.InvariantCulture));
 
             SetResult(Result.Ok, intent);
