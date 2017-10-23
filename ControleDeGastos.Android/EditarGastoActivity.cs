@@ -55,13 +55,13 @@ namespace ControleDeGastos.Android
 
         private void editTextData_Click(object sender, EventArgs e)
         {
-            var frag = DatePickerFragment.NewInstance(
+            var frag = new DatePickerFragment(
                 Convert.ToDateTime(_editTextData.Text),
                 (data) =>
                 {
                     _editTextData.Text = data.ToShortDateString();
                 });
-            frag.Show(FragmentManager, DatePickerFragment.TAG);
+            frag.Show(FragmentManager, string.Empty);
         }
 
         private void Salvar_Click(object sender, EventArgs e)

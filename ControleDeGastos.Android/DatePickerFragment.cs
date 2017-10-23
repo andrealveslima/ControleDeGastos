@@ -14,30 +14,23 @@ namespace ControleDeGastos.Android
 {
     public class DatePickerFragment : DialogFragment, DatePickerDialog.IOnDateSetListener
     {
-        // TAG can be any string of your choice.
-        public static readonly string TAG = "X:" + typeof(DatePickerFragment).Name.ToUpper();
-
+        Action<DateTime> _dateSelectedHandler;
         private DateTime _initialDate;
 
-        // Initialize this value to prevent NullReferenceExceptions.
-        Action<DateTime> _dateSelectedHandler = delegate { };
-
-        public static DatePickerFragment NewInstance(DateTime initialDate, Action<DateTime> onDateSelected)
+        public DatePickerFragment(DateTime initialDate, Action<DateTime> onDateSelected)
         {
-            DatePickerFragment frag = new DatePickerFragment();
-            frag._dateSelectedHandler = onDateSelected;
-            frag._initialDate = initialDate;
-            return frag;
+            this._initialDate = initialDate;
+            this._dateSelectedHandler = onDateSelected;
         }
 
         public override Dialog OnCreateDialog(Bundle savedInstanceState)
         {
-            DatePickerDialog dialog = new DatePickerDialog(Activity,
-                                                           this,
-                                                           _initialDate.Year,
-                                                           _initialDate.Month - 1,
-                                                           _initialDate.Day);
-            return dialog;
+            return new DatePickerDialog(
+                Activity,
+                this,
+                _initialDate.Year,
+                _initialDate.Month - 1,
+                _initialDate.Day);
         }
 
         public void OnDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
