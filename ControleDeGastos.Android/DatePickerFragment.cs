@@ -14,13 +14,13 @@ namespace ControleDeGastos.Android
 {
     public class DatePickerFragment : DialogFragment, DatePickerDialog.IOnDateSetListener
     {
-        Action<DateTime> _dateSelectedHandler;
+        Action<DateTime> _onDateSelected;
         private DateTime _initialDate;
 
         public DatePickerFragment(DateTime initialDate, Action<DateTime> onDateSelected)
         {
             this._initialDate = initialDate;
-            this._dateSelectedHandler = onDateSelected;
+            this._onDateSelected = onDateSelected;
         }
 
         public override Dialog OnCreateDialog(Bundle savedInstanceState)
@@ -37,7 +37,7 @@ namespace ControleDeGastos.Android
         {
             // Note: monthOfYear is a value between 0 and 11, not 1 and 12!
             DateTime selectedDate = new DateTime(year, monthOfYear + 1, dayOfMonth);
-            _dateSelectedHandler(selectedDate);
+            _onDateSelected(selectedDate);
         }
     }
 }
