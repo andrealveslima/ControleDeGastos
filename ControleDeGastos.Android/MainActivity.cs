@@ -130,6 +130,8 @@ namespace ControleDeGastos.Android
 
                 _adapter.NotifyDataSetChanged();
                 ExpandirTodosOsGruposDoListView();
+
+                Dados.Salvar();
             }
         }
 

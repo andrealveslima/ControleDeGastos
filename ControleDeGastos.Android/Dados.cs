@@ -28,18 +28,49 @@ namespace ControleDeGastos.Android
             Estabelecimentos.Clear();
             Gastos.Clear();
 
-            for (int c = 1; c <= 10; c++)
+            var diretorio = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+
+            var caminhoEstabelecimentos = System.IO.Path.Combine(diretorio, "estabelecimentos.json");
+            if (System.IO.File.Exists(caminhoEstabelecimentos))
             {
-                Estabelecimentos.Add(new Models.Estabelecimento() { Id = c, Nome = string.Format("Estabelecimento {0}", c) });
+                using (var stream = new System.IO.FileStream(caminhoEstabelecimentos, System.IO.FileMode.Open))
+                {
+                    var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(List<Models.Estabelecimento>));
+                    Estabelecimentos = (List<Models.Estabelecimento>)serializer.ReadObject(stream);
+                }
+            }
+            else
+            {
+                for (int c = 1; c <= 10; c++)
+                {
+                    Estabelecimentos.Add(new Models.Estabelecimento() { Id = c, Nome = string.Format("Estabelecimento {0}", c) });
+                }
             }
 
-            var random = new Random();
-            for (int c = 1; c <= 15; c++)
+            var caminhoGastos = System.IO.Path.Combine(diretorio, "gastos.json");
+            if (System.IO.File.Exists(caminhoGastos))
             {
-                var data = DateTime.Now.AddDays(random.Next(0, 3));
-                var estabelecimento = Estabelecimentos[random.Next(0, Estabelecimentos.Count - 1)];
-                var valor = random.Next(1, 50);
-                Gastos.Add(new Models.Gasto() { Id = c, Data = data, Estabelecimento = estabelecimento, Valor = valor });
+                using (var stream = new System.IO.FileStream(caminhoGastos, System.IO.FileMode.Open))
+                {
+                    var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(List<Models.Gasto>));
+                    Gastos = (List<Models.Gasto>)serializer.ReadObject(stream);
+                }
+            }
+        }
+
+        public void Salvar()
+        {
+            var diretorio = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+
+            using (var stream = new System.IO.FileStream(System.IO.Path.Combine(diretorio, "estabelecimentos.json"), System.IO.FileMode.Create))
+            {
+                var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(List<Models.Estabelecimento>));
+                serializer.WriteObject(stream, Estabelecimentos);
+            }
+            using (var stream = new System.IO.FileStream(System.IO.Path.Combine(diretorio, "gastos.json"), System.IO.FileMode.Create))
+            {
+                var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(List<Models.Gasto>));
+                serializer.WriteObject(stream, Gastos);
             }
         }
     }
