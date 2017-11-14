@@ -37,6 +37,15 @@ namespace ControleDeGastos.Android
             _spinnerEstabelecimento = FindViewById<Spinner>(Resource.Id.spinnerEstabelecimento);
             _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Estabelecimentos.Select(e => e.Nome).ToArray());
             var estabelecimento = MainActivity.Estabelecimentos.FirstOrDefault(e => nomeEstabelecimento == e.Nome);
+            if (estabelecimento == null)
+            {
+                var sharedPreferences = global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(Application.Context);
+                var estabelecimentoID = sharedPreferences.GetInt("UltimoEstabelecimento", -1);
+                if (estabelecimentoID != -1)
+                {
+                    estabelecimento = MainActivity.Estabelecimentos.FirstOrDefault(e => e.Id == estabelecimentoID);
+                }
+            }
             if (estabelecimento != null)
             {
                 _spinnerEstabelecimento.SetSelection(MainActivity.Estabelecimentos.IndexOf(estabelecimento));
@@ -70,10 +79,18 @@ namespace ControleDeGastos.Android
             intent.PutExtra("Id", _idGasto);
             var data = Convert.ToDateTime(_editTextData.Text);
             intent.PutExtra("Data", data.Ticks);
-            intent.PutExtra("Estabelecimento", MainActivity.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition].Nome);
+            var estabelecimento = MainActivity.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
+            intent.PutExtra("Estabelecimento", estabelecimento.Nome);
             intent.PutExtra("Valor", Convert.ToDouble(_editTextValor.Text, System.Globalization.CultureInfo.InvariantCulture));
 
             SetResult(Result.Ok, intent);
+
+            var sharedPreferences = global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(Application.Context);
+            sharedPreferences.Edit();
+            var preferencesEditor = sharedPreferences.Edit();
+            preferencesEditor.PutInt("UltimoEstabelecimento", estabelecimento.Id);
+            preferencesEditor.Commit();
+
             Finish();
         }
     }
