@@ -35,20 +35,20 @@ namespace ControleDeGastos.Android
 
             var nomeEstabelecimento = Intent.Extras.GetString("Estabelecimento");
             _spinnerEstabelecimento = FindViewById<Spinner>(Resource.Id.spinnerEstabelecimento);
-            _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Estabelecimentos.Select(e => e.Nome).ToArray());
-            var estabelecimento = MainActivity.Estabelecimentos.FirstOrDefault(e => nomeEstabelecimento == e.Nome);
+            _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Dados.Estabelecimentos.Select(e => e.Nome).ToArray());
+            var estabelecimento = MainActivity.Dados.Estabelecimentos.FirstOrDefault(e => nomeEstabelecimento == e.Nome);
             if (estabelecimento == null)
             {
                 var sharedPreferences = global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(Application.Context);
                 var estabelecimentoID = sharedPreferences.GetInt("UltimoEstabelecimento", -1);
                 if (estabelecimentoID != -1)
                 {
-                    estabelecimento = MainActivity.Estabelecimentos.FirstOrDefault(e => e.Id == estabelecimentoID);
+                    estabelecimento = MainActivity.Dados.Estabelecimentos.FirstOrDefault(e => e.Id == estabelecimentoID);
                 }
             }
             if (estabelecimento != null)
             {
-                _spinnerEstabelecimento.SetSelection(MainActivity.Estabelecimentos.IndexOf(estabelecimento));
+                _spinnerEstabelecimento.SetSelection(MainActivity.Dados.Estabelecimentos.IndexOf(estabelecimento));
             }
 
             var valor = Intent.Extras.GetDouble("Valor");
@@ -79,7 +79,7 @@ namespace ControleDeGastos.Android
             intent.PutExtra("Id", _idGasto);
             var data = Convert.ToDateTime(_editTextData.Text);
             intent.PutExtra("Data", data.Ticks);
-            var estabelecimento = MainActivity.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
+            var estabelecimento = MainActivity.Dados.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
             intent.PutExtra("Estabelecimento", estabelecimento.Nome);
             intent.PutExtra("Valor", Convert.ToDouble(_editTextValor.Text, System.Globalization.CultureInfo.InvariantCulture));
 

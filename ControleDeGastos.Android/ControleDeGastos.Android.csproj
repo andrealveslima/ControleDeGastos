@@ -47,10 +47,12 @@
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dados.cs" />
     <Compile Include="DatePickerFragment.cs" />
     <Compile Include="EditarGastoActivity.cs" />
     <Compile Include="ListViewAdapter.cs" />

@@ -16,8 +16,7 @@ namespace ControleDeGastos.Android
         private Button _buttonNovo;
         private Button _buttonLimpar;
 
-        public static List<Models.Estabelecimento> Estabelecimentos { get; private set; }
-        private List<Models.Gasto> _gastos;
+        public static Dados Dados { get; private set; }
         private List<ListViewGroup> _listViewGroups;
         private ListViewAdapter _adapter;
 
@@ -29,12 +28,13 @@ namespace ControleDeGastos.Android
 
             base.OnCreate(bundle);
 
-            _gastos = CarregarGastos();
+            Dados = new Dados();
+            Dados.Carregar();
 
             SetContentView(Resource.Layout.Main);
 
             _listViewGastos = FindViewById<ExpandableListView>(Resource.Id.listViewGastos);
-            _listViewGroups = PrepararListViewGroups(_gastos);
+            _listViewGroups = PrepararListViewGroups(Dados.Gastos);
             _adapter = new ListViewAdapter(this, _listViewGroups);
             _listViewGastos.SetAdapter(_adapter);
             _listViewGastos.ChildClick += ListViewGastos_ChildClick;
@@ -49,7 +49,7 @@ namespace ControleDeGastos.Android
 
         private void buttonLimpar_Click(object sender, EventArgs e)
         {
-            _gastos.Clear();
+            Dados.Gastos.Clear();
             _listViewGroups.Clear();
             _adapter.NotifyDataSetChanged();
         }
@@ -77,7 +77,7 @@ namespace ControleDeGastos.Android
             if (resultCode == Result.Ok)
             {
                 var id = data.Extras.GetInt("Id");
-                var gasto = _gastos.FirstOrDefault(g => g.Id == id);
+                var gasto = Dados.Gastos.FirstOrDefault(g => g.Id == id);
 
                 if (gasto == null)
                 {
@@ -85,11 +85,11 @@ namespace ControleDeGastos.Android
                     {
                         Id = 1
                     };
-                    if (_gastos.Any())
+                    if (Dados.Gastos.Any())
                     {
-                        gasto.Id = _gastos.Max(g => g.Id) + 1;
+                        gasto.Id = Dados.Gastos.Max(g => g.Id) + 1;
                     }
-                    _gastos.Add(gasto);
+                    Dados.Gastos.Add(gasto);
                 }
 
                 var dataAnterior = gasto.Data.Date;
@@ -97,7 +97,7 @@ namespace ControleDeGastos.Android
                 gasto.Data = dataNova;
                 gasto.Valor = Convert.ToDecimal(data.Extras.GetDouble("Valor"));
                 var nomeEstabelecimento = data.Extras.GetString("Estabelecimento");
-                var estabelecimento = Estabelecimentos.FirstOrDefault(e => string.Compare(e.Nome, nomeEstabelecimento, StringComparison.InvariantCultureIgnoreCase) == 0);
+                var estabelecimento = Dados.Estabelecimentos.FirstOrDefault(e => string.Compare(e.Nome, nomeEstabelecimento, StringComparison.InvariantCultureIgnoreCase) == 0);
                 if (estabelecimento == null)
                 {
                     estabelecimento = new Models.Estabelecimento()
@@ -143,27 +143,6 @@ namespace ControleDeGastos.Android
             intent.PutExtra("Estabelecimento", gasto.Estabelecimento.Nome);
             intent.PutExtra("Valor", Convert.ToDouble(gasto.Valor));
             StartActivityForResult(intent, 0);
-        }
-
-        private List<Models.Gasto> CarregarGastos()
-        {
-            Estabelecimentos = new List<Models.Estabelecimento>();
-            for (int c = 1; c <= 10; c++)
-            {
-                Estabelecimentos.Add(new Models.Estabelecimento() { Id = c, Nome = string.Format("Estabelecimento {0}", c) });
-            }
-
-            var random = new Random();
-            var gastos = new List<Models.Gasto>();
-            for (int c = 1; c <= 15; c++)
-            {
-                var data = DateTime.Now.AddDays(random.Next(0, 3));
-                var estabelecimento = Estabelecimentos[random.Next(0, Estabelecimentos.Count - 1)];
-                var valor = random.Next(1, 50);
-                gastos.Add(new Models.Gasto() { Id = c, Data = data, Estabelecimento = estabelecimento, Valor = valor });
-            }
-
-            return gastos;
         }
 
         private List<ListViewGroup> PrepararListViewGroups(List<Models.Gasto> gastos)
