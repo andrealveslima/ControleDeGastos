@@ -26,6 +26,8 @@ namespace ControleDeGastos.Android
 		
 		public static void UpdateIdValues()
 		{
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.ApplicationName = global::ControleDeGastos.Android.Resource.String.ApplicationName;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.Hello = global::ControleDeGastos.Android.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
