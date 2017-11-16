@@ -79,18 +79,16 @@ namespace ControleDeGastos.Android
             intent.PutExtra("Id", _idGasto);
             var data = Convert.ToDateTime(_editTextData.Text);
             intent.PutExtra("Data", data.Ticks);
-            var estabelecimento = MainActivity.Dados.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
-            intent.PutExtra("Estabelecimento", estabelecimento.Nome);
             intent.PutExtra("Valor", Convert.ToDouble(_editTextValor.Text, System.Globalization.CultureInfo.InvariantCulture));
 
-            SetResult(Result.Ok, intent);
-
+            var estabelecimento = MainActivity.Dados.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
+            intent.PutExtra("Estabelecimento", estabelecimento.Nome);
             var sharedPreferences = global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(Application.Context);
-            sharedPreferences.Edit();
             var preferencesEditor = sharedPreferences.Edit();
             preferencesEditor.PutInt("UltimoEstabelecimento", estabelecimento.Id);
             preferencesEditor.Commit();
 
+            SetResult(Result.Ok, intent);
             Finish();
         }
     }
