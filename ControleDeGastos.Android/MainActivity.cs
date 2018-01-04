@@ -49,9 +49,20 @@ namespace ControleDeGastos.Android
 
         private void buttonLimpar_Click(object sender, EventArgs e)
         {
-            Dados.Gastos.Clear();
-            _listViewGroups.Clear();
-            _adapter.NotifyDataSetChanged();
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle("Confirmação");
+            alert.SetMessage("Confirma a limpeza completa da lista de gastos?");
+            alert.SetPositiveButton("OK", (senderAlert, args) => {
+                Dados.Gastos.Clear();
+                _listViewGroups.Clear();
+                _adapter.NotifyDataSetChanged();
+                Dados.Salvar();
+            });
+
+            alert.SetNegativeButton("Cancelar", (IDialogInterfaceOnClickListener)null);
+
+            Dialog dialog = alert.Create();
+            dialog.Show();
         }
 
         private void buttonNovo_Click(object sender, EventArgs e)
