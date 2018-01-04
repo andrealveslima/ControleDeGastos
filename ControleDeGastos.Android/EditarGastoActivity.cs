@@ -64,8 +64,14 @@ namespace ControleDeGastos.Android
 
         private void editTextData_Click(object sender, EventArgs e)
         {
+            var dataBase = DateTime.Now.Date;
+            if (!string.IsNullOrWhiteSpace(_editTextData.Text))
+            {
+                DateTime.TryParse(_editTextData.Text, out dataBase);
+            }
+
             var frag = new DatePickerFragment(
-                Convert.ToDateTime(_editTextData.Text),
+                dataBase,
                 (data) =>
                 {
                     _editTextData.Text = data.ToShortDateString();
@@ -75,21 +81,40 @@ namespace ControleDeGastos.Android
 
         private void Salvar_Click(object sender, EventArgs e)
         {
-            var intent = new Intent();
-            intent.PutExtra("Id", _idGasto);
-            var data = Convert.ToDateTime(_editTextData.Text);
-            intent.PutExtra("Data", data.Ticks);
-            intent.PutExtra("Valor", Convert.ToDouble(_editTextValor.Text, System.Globalization.CultureInfo.InvariantCulture));
+            DateTime data;
+            double valor;
 
-            var estabelecimento = MainActivity.Dados.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
-            intent.PutExtra("Estabelecimento", estabelecimento.Nome);
-            var sharedPreferences = global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(Application.Context);
-            var preferencesEditor = sharedPreferences.Edit();
-            preferencesEditor.PutInt("UltimoEstabelecimento", estabelecimento.Id);
-            preferencesEditor.Commit();
+            if (ValidarPreenchimento(out data, out valor))
+            {
+                var intent = new Intent();
+                intent.PutExtra("Id", _idGasto);
+                intent.PutExtra("Data", data.Ticks);
+                intent.PutExtra("Valor", valor);
 
-            SetResult(Result.Ok, intent);
-            Finish();
+                var estabelecimento = MainActivity.Dados.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
+                intent.PutExtra("Estabelecimento", estabelecimento.Nome);
+                var sharedPreferences = global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(Application.Context);
+                var preferencesEditor = sharedPreferences.Edit();
+                preferencesEditor.PutInt("UltimoEstabelecimento", estabelecimento.Id);
+                preferencesEditor.Commit();
+
+                SetResult(Result.Ok, intent);
+                Finish();
+            }
+            else
+            {
+                Toast.MakeText(ApplicationContext, "Data e/ou valor inválido", ToastLength.Long).Show();
+            }
+        }
+
+        private bool ValidarPreenchimento(out DateTime data, out double valor)
+        {
+            data = DateTime.MinValue;
+            valor = double.MinValue;
+            return !string.IsNullOrWhiteSpace(_editTextData.Text) && !string.IsNullOrWhiteSpace(_editTextValor.Text) &&
+                   DateTime.TryParse(_editTextData.Text, out data) && 
+                   double.TryParse(_editTextValor.Text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out valor) &&
+                   valor > 0;
         }
     }
 }
