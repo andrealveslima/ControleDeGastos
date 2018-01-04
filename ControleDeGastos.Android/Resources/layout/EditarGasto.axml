@@ -44,12 +44,18 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:weightSum="2">
+        android:weightSum="3">
         <Button
             android:text="Salvar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/buttonSalvar"
+            android:layout_weight="1" />
+        <Button
+            android:text="Excluir"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/buttonExcluir"
             android:layout_weight="1" />
         <Button
             android:text="Cancelar"

@@ -60,6 +60,33 @@ namespace ControleDeGastos.Android
 
             var salvar = FindViewById<Button>(Resource.Id.buttonSalvar);
             salvar.Click += Salvar_Click;
+
+            var excluir = FindViewById<Button>(Resource.Id.buttonExcluir);
+            excluir.Click += Excluir_Click;
+        }
+
+        private void Excluir_Click(object sender, EventArgs e)
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle("Confirmação");
+            alert.SetMessage("Confirma a exclusão do gasto?");
+            alert.SetPositiveButton("OK", (senderAlert, args) => {
+                var gasto = MainActivity.Dados.Gastos.FirstOrDefault(g => g.Id == _idGasto);
+                if (gasto != null)
+                {
+                    MainActivity.Dados.Gastos.Remove(gasto);
+                }
+
+                var intent = new Intent();
+                intent.PutExtra("Id", _idGasto);
+                intent.PutExtra("Excluido", true);
+                SetResult(Result.Ok, intent);
+                Finish();
+            });
+            alert.SetNegativeButton("Cancelar", (IDialogInterfaceOnClickListener)null);
+
+            Dialog dialog = alert.Create();
+            dialog.Show();
         }
 
         private void editTextData_Click(object sender, EventArgs e)

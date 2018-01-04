@@ -88,55 +88,60 @@ namespace ControleDeGastos.Android
             if (resultCode == Result.Ok)
             {
                 var id = data.Extras.GetInt("Id");
-                var gasto = Dados.Gastos.FirstOrDefault(g => g.Id == id);
+                var excluido = data.Extras.GetBoolean("Excluido");
 
-                if (gasto == null)
+                if (!excluido)
                 {
-                    gasto = new Models.Gasto()
-                    {
-                        Id = 1
-                    };
-                    if (Dados.Gastos.Any())
-                    {
-                        gasto.Id = Dados.Gastos.Max(g => g.Id) + 1;
-                    }
-                    Dados.Gastos.Add(gasto);
-                }
+                    var gasto = Dados.Gastos.FirstOrDefault(g => g.Id == id);
 
-                var dataAnterior = gasto.Data.Date;
-                var dataNova = new DateTime(data.Extras.GetLong("Data")).Date;
-                gasto.Data = dataNova;
-                gasto.Valor = Convert.ToDecimal(data.Extras.GetDouble("Valor"));
-                var nomeEstabelecimento = data.Extras.GetString("Estabelecimento");
-                var estabelecimento = Dados.Estabelecimentos.FirstOrDefault(e => string.Compare(e.Nome, nomeEstabelecimento, StringComparison.InvariantCultureIgnoreCase) == 0);
-                if (estabelecimento == null)
-                {
-                    estabelecimento = new Models.Estabelecimento()
+                    if (gasto == null)
                     {
-                        Nome = nomeEstabelecimento
-                    };
-                }
-                gasto.Estabelecimento = estabelecimento;
-
-                if (!dataAnterior.Equals(dataNova))
-                {
-                    var listViewGroupAnterior = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataAnterior));
-                    if (listViewGroupAnterior != null)
-                    {
-                        listViewGroupAnterior.Gastos.Remove(gasto);
-                    }
-
-                    var listViewGroupNovo = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataNova));
-                    if (listViewGroupNovo == null)
-                    {
-                        listViewGroupNovo = new ListViewGroup()
+                        gasto = new Models.Gasto()
                         {
-                            Data = dataNova
+                            Id = 1
                         };
-                        _listViewGroups.Add(listViewGroupNovo);
+                        if (Dados.Gastos.Any())
+                        {
+                            gasto.Id = Dados.Gastos.Max(g => g.Id) + 1;
+                        }
+                        Dados.Gastos.Add(gasto);
                     }
-                    listViewGroupNovo.Gastos.Add(gasto);
-                    _listViewGroups.Sort((lvg1, lvg2) => lvg1.Data.CompareTo(lvg2.Data));
+
+                    var dataAnterior = gasto.Data.Date;
+                    var dataNova = new DateTime(data.Extras.GetLong("Data")).Date;
+                    gasto.Data = dataNova;
+                    gasto.Valor = Convert.ToDecimal(data.Extras.GetDouble("Valor"));
+                    var nomeEstabelecimento = data.Extras.GetString("Estabelecimento");
+                    var estabelecimento = Dados.Estabelecimentos.FirstOrDefault(e => string.Compare(e.Nome, nomeEstabelecimento, StringComparison.InvariantCultureIgnoreCase) == 0);
+                    if (estabelecimento == null)
+                    {
+                        estabelecimento = new Models.Estabelecimento()
+                        {
+                            Nome = nomeEstabelecimento
+                        };
+                    }
+                    gasto.Estabelecimento = estabelecimento;
+
+                    if (!dataAnterior.Equals(dataNova))
+                    {
+                        var listViewGroupAnterior = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataAnterior));
+                        if (listViewGroupAnterior != null)
+                        {
+                            listViewGroupAnterior.Gastos.Remove(gasto);
+                        }
+
+                        var listViewGroupNovo = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataNova));
+                        if (listViewGroupNovo == null)
+                        {
+                            listViewGroupNovo = new ListViewGroup()
+                            {
+                                Data = dataNova
+                            };
+                            _listViewGroups.Add(listViewGroupNovo);
+                        }
+                        listViewGroupNovo.Gastos.Add(gasto);
+                        _listViewGroups.Sort((lvg1, lvg2) => lvg1.Data.CompareTo(lvg2.Data));
+                    }
                 }
 
                 _adapter.NotifyDataSetChanged();
