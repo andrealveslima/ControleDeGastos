@@ -143,6 +143,15 @@ namespace ControleDeGastos.Android
                         _listViewGroups.Sort((lvg1, lvg2) => lvg1.Data.CompareTo(lvg2.Data));
                     }
                 }
+                else
+                {
+                    var listViewGroup = _listViewGroups.FirstOrDefault(lvg => lvg.Gastos.Any(g => g.Id == id));
+                    if (listViewGroup != null)
+                    {
+                        var gasto = listViewGroup.Gastos.First(g => g.Id == id);
+                        listViewGroup.Gastos.Remove(gasto);
+                    }
+                }
 
                 _adapter.NotifyDataSetChanged();
                 ExpandirTodosOsGruposDoListView();
