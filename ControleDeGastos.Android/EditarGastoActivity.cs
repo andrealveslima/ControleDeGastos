@@ -63,6 +63,35 @@ namespace ControleDeGastos.Android
 
             var excluir = FindViewById<Button>(Resource.Id.buttonExcluir);
             excluir.Click += Excluir_Click;
+
+            var novoEstabelecimento = FindViewById<Button>(Resource.Id.buttonNovoEstabelecimento);
+            novoEstabelecimento.Click += NovoEstabelecimento_Click;
+
+            var excluirEstabelecimento = FindViewById<Button>(Resource.Id.buttonExcluirEstabelecimento);
+            excluirEstabelecimento.Click += ExcluirEstabelecimento_Click;
+        }
+
+        private void ExcluirEstabelecimento_Click(object sender, EventArgs e)
+        {
+            if (_spinnerEstabelecimento.SelectedItemPosition >= 0)
+            {
+                var estabelecimento = MainActivity.Dados.Estabelecimentos[_spinnerEstabelecimento.SelectedItemPosition];
+                if (MainActivity.Dados.Gastos.Any(g => g.EstabelecimentoId == estabelecimento.Id))
+                {
+                    Toast.MakeText(ApplicationContext, "Este estabelecimento está sendo utilizado", ToastLength.Long).Show();
+                }
+                else
+                {
+                    MainActivity.Dados.Estabelecimentos.Remove(estabelecimento);
+                    MainActivity.Dados.Salvar();
+                    _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Dados.Estabelecimentos.Select(est => est.Nome).ToArray());
+                }
+            }
+        }
+
+        private void NovoEstabelecimento_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void Excluir_Click(object sender, EventArgs e)

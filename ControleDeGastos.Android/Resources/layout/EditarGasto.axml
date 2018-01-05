@@ -24,10 +24,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewEstabelecimento" />
-        <Spinner
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinnerEstabelecimento" />
+            android:layout_gravity="bottom"
+            android:weightSum="100">
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerEstabelecimento"
+                android:layout_weight="80" />
+            <Button
+                android:text="+"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/buttonNovoEstabelecimento"
+                android:layout_weight="10" />
+            <Button
+                android:text="-"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/buttonExcluirEstabelecimento"
+                android:layout_weight="10" />
+        </LinearLayout>
         <TextView
             android:text="Valor"
             android:layout_width="match_parent"

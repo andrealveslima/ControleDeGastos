@@ -62,38 +62,44 @@ namespace ControleDeGastos.Android
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050009
-			public const int Data = 2131034121;
-			
 			// aapt resource value: 0x7f05000b
-			public const int NomeEstabelecimento = 2131034123;
-			
-			// aapt resource value: 0x7f05000a
-			public const int Valor = 2131034122;
-			
-			// aapt resource value: 0x7f050008
-			public const int buttonCancelar = 2131034120;
-			
-			// aapt resource value: 0x7f050007
-			public const int buttonExcluir = 2131034119;
-			
-			// aapt resource value: 0x7f05000e
-			public const int buttonLimpar = 2131034126;
+			public const int Data = 2131034123;
 			
 			// aapt resource value: 0x7f05000d
-			public const int buttonNovo = 2131034125;
+			public const int NomeEstabelecimento = 2131034125;
 			
-			// aapt resource value: 0x7f050006
-			public const int buttonSalvar = 2131034118;
+			// aapt resource value: 0x7f05000c
+			public const int Valor = 2131034124;
+			
+			// aapt resource value: 0x7f05000a
+			public const int buttonCancelar = 2131034122;
+			
+			// aapt resource value: 0x7f050009
+			public const int buttonExcluir = 2131034121;
+			
+			// aapt resource value: 0x7f050005
+			public const int buttonExcluirEstabelecimento = 2131034117;
+			
+			// aapt resource value: 0x7f050010
+			public const int buttonLimpar = 2131034128;
+			
+			// aapt resource value: 0x7f05000f
+			public const int buttonNovo = 2131034127;
+			
+			// aapt resource value: 0x7f050004
+			public const int buttonNovoEstabelecimento = 2131034116;
+			
+			// aapt resource value: 0x7f050008
+			public const int buttonSalvar = 2131034120;
 			
 			// aapt resource value: 0x7f050001
 			public const int editTextData = 2131034113;
 			
-			// aapt resource value: 0x7f050005
-			public const int editTextValor = 2131034117;
+			// aapt resource value: 0x7f050007
+			public const int editTextValor = 2131034119;
 			
-			// aapt resource value: 0x7f05000c
-			public const int listViewGastos = 2131034124;
+			// aapt resource value: 0x7f05000e
+			public const int listViewGastos = 2131034126;
 			
 			// aapt resource value: 0x7f050003
 			public const int spinnerEstabelecimento = 2131034115;
@@ -104,8 +110,8 @@ namespace ControleDeGastos.Android
 			// aapt resource value: 0x7f050002
 			public const int textViewEstabelecimento = 2131034114;
 			
-			// aapt resource value: 0x7f050004
-			public const int textViewValor = 2131034116;
+			// aapt resource value: 0x7f050006
+			public const int textViewValor = 2131034118;
 			
 			static Id()
 			{

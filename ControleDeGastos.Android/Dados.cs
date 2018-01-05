@@ -64,6 +64,9 @@ namespace ControleDeGastos.Android
         {
             using (var db = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid(), _caminhoBanco, storeDateTimeAsTicks: false))
             {
+                db.Execute("DELETE FROM Estabelecimento");
+                db.InsertAll(Estabelecimentos);
+
                 db.Execute("DELETE FROM Gasto");
                 foreach (var gasto in Gastos)
                 {
