@@ -91,7 +91,22 @@ namespace ControleDeGastos.Android
 
         private void NovoEstabelecimento_Click(object sender, EventArgs e)
         {
+            EditText editTextEstabelecimento = new EditText(this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.SetTitle("Nome do Estabelecimento");
+            dialog.SetView(editTextEstabelecimento);
+            dialog.SetPositiveButton("OK", (senderAlert, args) =>
+            {
+                var estabelecimento = new Models.Estabelecimento();
+                estabelecimento.Id = MainActivity.Dados.Estabelecimentos.Max(est => est.Id) + 1;
+                estabelecimento.Nome = editTextEstabelecimento.Text;
+                MainActivity.Dados.Estabelecimentos.Add(estabelecimento);
+                _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Dados.Estabelecimentos.Select(est => est.Nome).ToArray());
+                _spinnerEstabelecimento.SetSelection(MainActivity.Dados.Estabelecimentos.IndexOf(estabelecimento));
+            });
+            dialog.SetNegativeButton("Cancelar", (IDialogInterfaceOnClickListener)null);
 
+            dialog.Show();
         }
 
         private void Excluir_Click(object sender, EventArgs e)
@@ -99,7 +114,8 @@ namespace ControleDeGastos.Android
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.SetTitle("Confirmação");
             alert.SetMessage("Confirma a exclusão do gasto?");
-            alert.SetPositiveButton("OK", (senderAlert, args) => {
+            alert.SetPositiveButton("OK", (senderAlert, args) => 
+            {
                 var gasto = MainActivity.Dados.Gastos.FirstOrDefault(g => g.Id == _idGasto);
                 if (gasto != null)
                 {
