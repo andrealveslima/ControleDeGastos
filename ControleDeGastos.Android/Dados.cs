@@ -18,7 +18,7 @@ namespace ControleDeGastos.Android
     {
         public List<Models.Estabelecimento> Estabelecimentos { get; private set; }
         public List<Models.Gasto> Gastos { get; private set; }
-        private string _caminhoBanco;
+        private readonly string _caminhoBanco;
 
         public Dados()
         {

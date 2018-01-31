@@ -15,8 +15,9 @@ namespace ControleDeGastos.Android
 {
     public class ListViewAdapter : BaseExpandableListAdapter
     {
-        List<ListViewGroup> grupos;
-        Activity context;
+        private readonly List<ListViewGroup> grupos;
+        private readonly Activity context;
+
         public ListViewAdapter(Activity context, List<ListViewGroup> grupos) : base()
         {
             this.context = context;
@@ -41,7 +42,7 @@ namespace ControleDeGastos.Android
 
         public override Java.Lang.Object GetChild(int groupPosition, int childPosition)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override long GetChildId(int groupPosition, int childPosition)
@@ -71,7 +72,7 @@ namespace ControleDeGastos.Android
 
         public override Java.Lang.Object GetGroup(int groupPosition)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override long GetGroupId(int groupPosition)

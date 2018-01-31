@@ -90,10 +90,12 @@ namespace ControleDeGastos.Android
                 var id = data.Extras.GetInt("Id");
                 var excluido = data.Extras.GetBoolean("Excluido");
 
+                // Se o gasto não foi excluído, vamos atualizá-lo
                 if (!excluido)
                 {
                     var gasto = Dados.Gastos.FirstOrDefault(g => g.Id == id);
 
+                    // Gasto nulo quer dizer que o usuário está criando um novo gasto.
                     if (gasto == null)
                     {
                         gasto = new Models.Gasto()
@@ -122,6 +124,7 @@ namespace ControleDeGastos.Android
                     }
                     gasto.Estabelecimento = estabelecimento;
 
+                    // Se a data anterior for diferente da nova, nós precisamos ajustar o pai do gasto na lista de ListViewGroups.
                     if (!dataAnterior.Equals(dataNova))
                     {
                         var listViewGroupAnterior = _listViewGroups.FirstOrDefault(lvg => lvg.Data.Equals(dataAnterior));
@@ -143,6 +146,7 @@ namespace ControleDeGastos.Android
                         _listViewGroups.Sort((lvg1, lvg2) => lvg1.Data.CompareTo(lvg2.Data));
                     }
                 }
+                // Se o gasto está sendo excluído, nós temos que removê-lo do ListView também.
                 else
                 {
                     var listViewGroup = _listViewGroups.FirstOrDefault(lvg => lvg.Gastos.Any(g => g.Id == id));
@@ -153,6 +157,7 @@ namespace ControleDeGastos.Android
                     }
                 }
 
+                // Notificando que os dados foram alterados para dar um refresh no ListView.
                 _adapter.NotifyDataSetChanged();
                 ExpandirTodosOsGruposDoListView();
 
@@ -172,7 +177,7 @@ namespace ControleDeGastos.Android
             StartActivityForResult(intent, 0);
         }
 
-        private List<ListViewGroup> PrepararListViewGroups(List<Models.Gasto> gastos)
+        private static List<ListViewGroup> PrepararListViewGroups(List<Models.Gasto> gastos)
         {
             var listViewGroups = new List<ListViewGroup>();
 

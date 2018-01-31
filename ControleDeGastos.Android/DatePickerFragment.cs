@@ -14,8 +14,8 @@ namespace ControleDeGastos.Android
 {
     public class DatePickerFragment : DialogFragment, DatePickerDialog.IOnDateSetListener
     {
-        Action<DateTime> _onDateSelected;
-        private DateTime _initialDate;
+        private readonly Action<DateTime> _onDateSelected;
+        private readonly DateTime _initialDate;
 
         public DatePickerFragment(DateTime initialDate, Action<DateTime> onDateSelected)
         {

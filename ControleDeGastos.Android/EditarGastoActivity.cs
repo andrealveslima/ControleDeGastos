@@ -26,6 +26,7 @@ namespace ControleDeGastos.Android
 
             SetContentView(Resource.Layout.EditarGasto);
 
+            // Pegando os valores passados pelo intent da janela principal.
             _idGasto = Intent.Extras.GetInt("Id");
 
             var data = new DateTime(Intent.Extras.GetLong("Data"));
@@ -37,6 +38,8 @@ namespace ControleDeGastos.Android
             _spinnerEstabelecimento = FindViewById<Spinner>(Resource.Id.spinnerEstabelecimento);
             _spinnerEstabelecimento.Adapter = new ArrayAdapter<string>(this, global::Android.Resource.Layout.SimpleSpinnerItem, MainActivity.Dados.Estabelecimentos.Select(e => e.Nome).ToArray());
             var estabelecimento = MainActivity.Dados.Estabelecimentos.FirstOrDefault(e => nomeEstabelecimento == e.Nome);
+
+            // Se um estabelecimento não foi passado no intent, nós tentamos preencher com o último estabelecimento selecionado anteriormente.
             if (estabelecimento == null)
             {
                 var sharedPreferences = global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(Application.Context);
@@ -55,6 +58,7 @@ namespace ControleDeGastos.Android
             _editTextValor = FindViewById<EditText>(Resource.Id.editTextValor);
             _editTextValor.Text = valor.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
+            // Botões e eventos.
             var cancelar = FindViewById<Button>(Resource.Id.buttonCancelar);
             cancelar.Click += (s, e) => Finish();
 
